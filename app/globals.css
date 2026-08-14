@@ -75,6 +75,7 @@ main { width: min(1480px, calc(100% - 48px)); margin: 0 auto; }
   transition: border-color .15s, box-shadow .15s;
 }
 .employee-form input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(197, 63, 51, .11); }
+.employee-form input:disabled { color: #777b7e; background: #f1efec; border-color: #dedad6; cursor: not-allowed; }
 
 .preview-heading-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .live-badge { display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border: 1px solid #dce8de; border-radius: 20px; color: #28733b; background: #f4faf5; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
