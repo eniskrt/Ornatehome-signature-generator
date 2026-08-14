@@ -13,10 +13,10 @@ export const signatureConfig = {
 } as const;
 
 export const defaultEmployee = {
-  fullName: "Mehmet Uncuoglu",
-  jobTitle: "CEO",
-  phone: "(323) 842 - 8804",
-  email: "mehmet@ornate.com",
+  fullName: "John Doe",
+  jobTitle: "Job Title",
+  phone: "(000) 000 - 0000",
+  email: "john.doe@example.com",
   address: signatureConfig.defaultAddress,
   website: signatureConfig.defaultWebsite,
 };
