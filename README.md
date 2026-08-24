@@ -63,4 +63,4 @@ Designer contact-icon SVGs live in `public/assets/signature/svg-icons/`. Run `np
 3. In Outlook, open Settings → Accounts → Signatures (or Mail → Compose and reply).
 4. Create or edit a signature, paste it, and save.
 
-**Copy HTML** places the raw HTML source on the clipboard for IT or developer use. Employee values are HTML-escaped before insertion, and phone, email, website, and map destinations are generated as clickable links.
+**Copy HTML** places the raw HTML source on the clipboard for IT or developer use. Employee values are HTML-escaped before insertion, and phone, optional LinkedIn, website, and map destinations are generated as clickable links.

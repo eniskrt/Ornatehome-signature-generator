@@ -8,7 +8,6 @@ export const signatureConfig = {
   logoPath: "/assets/signature/ornate-home-logo.png",
   inc5000Path: "/assets/signature/inc-5000-2026.png",
   phoneIcon: "/assets/signature/phone.png",
-  emailIcon: "/assets/signature/email.png",
   locationIcon: "/assets/signature/location.png",
   websiteIcon: "/assets/signature/website.png",
 } as const;
@@ -17,7 +16,7 @@ export const defaultEmployee = {
   fullName: "John Doe",
   jobTitle: "Job Title",
   phone: "(000) 000 - 0000",
-  email: "john.doe@example.com",
+  linkedinUrl: "",
   address: signatureConfig.defaultAddress,
   website: signatureConfig.defaultWebsite,
 };

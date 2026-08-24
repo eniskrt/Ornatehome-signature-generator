@@ -4,7 +4,7 @@ export type Employee = {
   fullName: string;
   jobTitle: string;
   phone: string;
-  email: string;
+  linkedinUrl: string;
   address: string;
   website: string;
 };
@@ -23,6 +23,19 @@ export function normalizeWebsiteUrl(website: string): string {
   const trimmed = website.trim();
   if (!trimmed) return "https://ornatehome.com";
   return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
+export function normalizeLinkedInUrl(linkedinUrl: string): string {
+  const trimmed = linkedinUrl.trim();
+  if (!trimmed) return "";
+  const candidate = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+
+  try {
+    const parsed = new URL(candidate);
+    return parsed.protocol === "http:" || parsed.protocol === "https:" ? parsed.toString() : "";
+  } catch {
+    return "";
+  }
 }
 
 export function normalizePhoneHref(phone: string): string {
@@ -50,14 +63,14 @@ function absoluteAsset(baseUrl: string, path: string): string {
 }
 
 function contactRow(iconUrl: string, alt: string, content: string): string {
-  return `<tr><td width="25" valign="middle" style="padding:0 9px 7px 0;vertical-align:middle;"><img src="${iconUrl}" width="17" height="17" alt="${alt}" style="display:block;width:17px;height:17px;border:0;outline:none;text-decoration:none;"></td><td valign="middle" style="padding:0 0 7px 0;vertical-align:middle;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:18px;font-weight:600;color:#777777;white-space:nowrap;">${content}</td></tr>`;
+  return `<tr><td width="12" valign="middle" style="padding:0 4px 3px 0;vertical-align:middle;"><img src="${iconUrl}" width="8" height="8" alt="${alt}" style="display:block;width:8px;height:8px;border:0;outline:none;text-decoration:none;"></td><td valign="middle" style="padding:0 0 3px 0;vertical-align:middle;font-family:Arial,Helvetica,sans-serif;font-size:7px;line-height:9px;font-weight:600;color:#777777;white-space:nowrap;">${content}</td></tr>`;
 }
 
 export function generateSignatureHtml(employee: Employee, baseUrl: string): string {
   const name = escapeHtml(employee.fullName.trim());
   const title = escapeHtml(employee.jobTitle.trim());
   const phone = escapeHtml(employee.phone.trim());
-  const email = escapeHtml(employee.email.trim());
+  const linkedinUrl = normalizeLinkedInUrl(employee.linkedinUrl);
   const address = escapeHtml(signatureConfig.defaultAddress);
   const website = escapeHtml(employee.website.trim());
   const linkStyle = "color:#777777;text-decoration:none;";
@@ -65,12 +78,14 @@ export function generateSignatureHtml(employee: Employee, baseUrl: string): stri
     logo: absoluteAsset(baseUrl, signatureConfig.logoPath),
     inc: absoluteAsset(baseUrl, signatureConfig.inc5000Path),
     phone: absoluteAsset(baseUrl, signatureConfig.phoneIcon),
-    email: absoluteAsset(baseUrl, signatureConfig.emailIcon),
     location: absoluteAsset(baseUrl, signatureConfig.locationIcon),
     website: absoluteAsset(baseUrl, signatureConfig.websiteIcon),
   };
+  const linkedinRow = linkedinUrl
+    ? contactRow(assets.website, "", `<a href="${escapeHtml(linkedinUrl)}" style="${linkStyle}">LinkedIn</a>`)
+    : "";
 
-  return `<table cellpadding="0" cellspacing="0" border="0" role="presentation" width="808" style="width:808px;max-width:808px;margin:0;border-collapse:collapse;background:#ffffff;mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr><td style="padding:20px 24px;"><table cellpadding="0" cellspacing="0" border="0" role="presentation" width="760" style="width:760px;border-collapse:collapse;table-layout:fixed;mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr><td width="205" valign="middle" style="width:205px;padding:0;vertical-align:middle;"><img src="${assets.logo}" width="205" alt="Ornate Home" style="display:block;width:205px;height:auto;border:0;outline:none;text-decoration:none;"></td><td width="24" style="width:24px;padding:0;font-size:0;line-height:0;">&nbsp;</td><td width="340" valign="middle" style="width:340px;padding:0;vertical-align:middle;"><table cellpadding="0" cellspacing="0" border="0" role="presentation" width="340" style="width:340px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr><td style="padding:0;font-family:Arial,Helvetica,sans-serif;font-size:27px;line-height:31px;font-weight:700;color:${signatureConfig.accentColor};">${name}</td></tr><tr><td style="padding:1px 0 6px 0;font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:22px;font-weight:400;color:#333333;">${title}</td></tr><tr><td height="1" style="height:1px;padding:0;background:#e3e3e3;font-size:1px;line-height:1px;">&nbsp;</td></tr><tr><td style="padding:12px 0 0 0;"><table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">${contactRow(assets.phone, "", `<a href="${escapeHtml(normalizePhoneHref(employee.phone))}" style="${linkStyle}">${phone}</a>`)}${contactRow(assets.email, "", `<a href="mailto:${email}" style="${linkStyle}">${email}</a>`)}${contactRow(assets.location, "", `<a href="${escapeHtml(signatureConfig.mapsUrl)}" style="${linkStyle}">${address}</a>`)}${contactRow(assets.website, "", `<a href="${escapeHtml(normalizeWebsiteUrl(employee.website))}" style="${linkStyle}">${website}</a>`)}</table></td></tr></table></td><td width="20" style="width:20px;padding:0;font-size:0;line-height:0;">&nbsp;</td><td width="1" style="width:1px;padding:0;background:#e3e3e3;font-size:1px;line-height:1px;">&nbsp;</td><td width="25" style="width:25px;padding:0;font-size:0;line-height:0;">&nbsp;</td><td width="145" valign="middle" style="width:145px;padding:0;vertical-align:middle;"><img src="${assets.inc}" width="145" alt="Inc. 5000 — Ranked #689 in 2026" style="display:block;width:145px;height:auto;border:0;outline:none;text-decoration:none;"></td></tr></table></td></tr></table>`;
+  return `<table cellpadding="0" cellspacing="0" border="0" role="presentation" width="400" style="width:400px;max-width:400px;margin:0;border-collapse:collapse;background:#ffffff;mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr><td style="padding:10px 12px;"><table cellpadding="0" cellspacing="0" border="0" role="presentation" width="376" style="width:376px;border-collapse:collapse;table-layout:fixed;mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr><td width="101" valign="middle" style="width:101px;padding:0;vertical-align:middle;"><img src="${assets.logo}" width="101" alt="Ornate Home" style="display:block;width:101px;height:auto;border:0;outline:none;text-decoration:none;"></td><td width="12" style="width:12px;padding:0;font-size:0;line-height:0;">&nbsp;</td><td width="168" valign="middle" style="width:168px;padding:0;vertical-align:middle;"><table cellpadding="0" cellspacing="0" border="0" role="presentation" width="168" style="width:168px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr><td style="padding:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:16px;font-weight:700;color:${signatureConfig.accentColor};">${name}</td></tr><tr><td style="padding:1px 0 3px 0;font-family:Arial,Helvetica,sans-serif;font-size:9px;line-height:11px;font-weight:400;color:#333333;">${title}</td></tr><tr><td height="1" style="height:1px;padding:0;background:#e3e3e3;font-size:1px;line-height:1px;">&nbsp;</td></tr><tr><td style="padding:6px 0 0 0;"><table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;">${contactRow(assets.phone, "", `<a href="${escapeHtml(normalizePhoneHref(employee.phone))}" style="${linkStyle}">${phone}</a>`)}${linkedinRow}${contactRow(assets.location, "", `<a href="${escapeHtml(signatureConfig.mapsUrl)}" style="${linkStyle}">${address}</a>`)}${contactRow(assets.website, "", `<a href="${escapeHtml(normalizeWebsiteUrl(employee.website))}" style="${linkStyle}">${website}</a>`)}</table></td></tr></table></td><td width="10" style="width:10px;padding:0;font-size:0;line-height:0;">&nbsp;</td><td width="1" style="width:1px;padding:0;background:#e3e3e3;font-size:1px;line-height:1px;">&nbsp;</td><td width="12" style="width:12px;padding:0;font-size:0;line-height:0;">&nbsp;</td><td width="72" valign="middle" style="width:72px;padding:0;vertical-align:middle;"><img src="${assets.inc}" width="72" alt="Inc. 5000 — Ranked #689 in 2026" style="display:block;width:72px;height:auto;border:0;outline:none;text-decoration:none;"></td></tr></table></td></tr></table>`;
 }
 
 export function generateSignatureText(employee: Employee): string {
@@ -78,7 +93,7 @@ export function generateSignatureText(employee: Employee): string {
     employee.fullName,
     employee.jobTitle,
     employee.phone,
-    employee.email,
+    normalizeLinkedInUrl(employee.linkedinUrl) ? `LinkedIn: ${normalizeLinkedInUrl(employee.linkedinUrl)}` : "",
     signatureConfig.defaultAddress,
     employee.website,
   ].map((value) => value.trim()).filter(Boolean).join("\n");

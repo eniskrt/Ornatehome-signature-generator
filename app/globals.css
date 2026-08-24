@@ -81,9 +81,9 @@ main { width: min(1480px, calc(100% - 48px)); margin: 0 auto; }
 .live-badge { display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border: 1px solid #dce8de; border-radius: 20px; color: #28733b; background: #f4faf5; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
 .live-badge i { display: block; width: 7px; height: 7px; border-radius: 50%; background: #3aa353; }
 
-.preview-shell { min-height: 330px; display: flex; align-items: center; background: #f8f7f5; border: 1px solid #e7e3df; border-radius: 9px; overflow: hidden; }
-.preview-scroll { width: 100%; overflow-x: auto; padding: 40px 32px; }
-.signature-preview { width: 808px; margin: 0 auto; background: #fff; box-shadow: 0 5px 22px rgba(22, 18, 15, .07); }
+.preview-shell { min-height: 180px; display: flex; align-items: center; background: #f8f7f5; border: 1px solid #e7e3df; border-radius: 9px; overflow: hidden; }
+.preview-scroll { width: 100%; overflow-x: auto; padding: 20px 18px; }
+.signature-preview { width: 400px; margin: 0; background: #fff; box-shadow: 0 5px 22px rgba(22, 18, 15, .07); }
 
 .copy-actions { display: grid; grid-template-columns: max-content max-content 1fr; gap: 10px; align-items: center; margin-top: 20px; }
 .copy-actions button { min-height: 43px; padding: 0 18px; border-radius: 7px; font-weight: 700; cursor: pointer; transition: transform .12s, background .12s; }
